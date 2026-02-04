@@ -5,8 +5,9 @@ node_modules/
 out/
 dist/
 
-# VS Code Extension Package
+# VS Code Extension Package (allow releases)
 *.vsix
+!releases/*.vsix
 
 # IDE
 .vscode/

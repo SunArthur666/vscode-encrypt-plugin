@@ -33,6 +33,7 @@ CHANGELOG.md
 .vscode/**
 .idea/**
 .claude/**
+.cursor/**
 
 # Encrypted test files
 *.md.enc
@@ -45,4 +46,5 @@ package-lock.json
 
 # Build artifacts
 *.vsix
-*.map
+# Note: .map files are needed for debugging, but can be excluded if desired
+# *.map

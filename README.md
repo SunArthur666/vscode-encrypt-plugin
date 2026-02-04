@@ -24,6 +24,9 @@
   <a href="https://github.com/SunArthur666/vscode-encrypt-plugin/issues">
     <img src="https://img.shields.io/github/issues/SunArthur666/vscode-encrypt-plugin?style=flat-square" alt="GitHub Issues">
   </a>
+  <a href="releases/vscode-encrypt-1.1.0.vsix">
+    <img src="https://img.shields.io/badge/download-VSIX-blue?style=flat-square&logo=visual-studio-code" alt="Download VSIX">
+  </a>
 </p>
 
 <p align="center">
@@ -32,7 +35,8 @@
   <a href="#quick-start">Quick Start</a> •
   <a href="#commands">Commands</a> •
   <a href="#settings">Settings</a> •
-  <a href="#faq">FAQ</a>
+  <a href="#faq">FAQ</a> •
+  <a href="releases/">Downloads</a>
 </p>
 
 ---
@@ -99,11 +103,27 @@ Encrypt entire files or selected text with **AES-256-GCM** — the same encrypti
 3. Search for **"VSCode Encrypt"**
 4. Click **Install**
 
-#### From VSIX File
+#### From VSIX File (Direct Download)
 
+**Download the latest release:**
+- 📦 [vscode-encrypt-1.1.0.vsix](releases/vscode-encrypt-1.1.0.vsix) (~55 KB)
+- 📋 [View all releases](releases/)
+
+**Installation methods:**
+
+**Option 1: VS Code UI**
+1. Open VS Code
+2. Go to Extensions (`Ctrl+Shift+X` / `Cmd+Shift+X`)
+3. Click `...` (More Actions) → `Install from VSIX...`
+4. Select the downloaded `.vsix` file
+
+**Option 2: Command Line**
 ```bash
-code --install-extension vscode-encrypt-1.0.0.vsix
+code --install-extension releases/vscode-encrypt-1.1.0.vsix
 ```
+
+**Option 3: GitHub Releases**
+Visit the [Releases page](https://github.com/SunArthur666/vscode-encrypt-plugin/releases) for the latest version.
 
 #### From Source
 
@@ -115,6 +135,13 @@ npm run compile
 ```
 
 Press `F5` in VS Code to launch in debug mode.
+
+**Build VSIX from source:**
+```bash
+npm install
+npm run compile
+npx vsce package
+```
 
 ### Quick Start
 
@@ -269,11 +296,27 @@ A: **Yes.** Files encrypted with this extension can be decrypted with Obsidian E
 3. 搜索 **"VSCode Encrypt"**
 4. 点击 **安装**
 
-#### 从 VSIX 文件安装
+#### 从 VSIX 文件安装（直接下载）
 
+**下载最新版本：**
+- 📦 [vscode-encrypt-1.1.0.vsix](releases/vscode-encrypt-1.1.0.vsix) (~55 KB)
+- 📋 [查看所有版本](releases/)
+
+**安装方式：**
+
+**方式 1：VS Code 界面**
+1. 打开 VS Code
+2. 进入扩展 (`Ctrl+Shift+X` / `Cmd+Shift+X`)
+3. 点击 `...` (更多操作) → `从 VSIX 安装...`
+4. 选择下载的 `.vsix` 文件
+
+**方式 2：命令行**
 ```bash
-code --install-extension vscode-encrypt-1.0.0.vsix
+code --install-extension releases/vscode-encrypt-1.1.0.vsix
 ```
+
+**方式 3：GitHub Releases**
+访问 [Releases 页面](https://github.com/SunArthur666/vscode-encrypt-plugin/releases) 获取最新版本。
 
 ### 快速开始
 
@@ -325,6 +368,13 @@ code --install-extension vscode-encrypt-1.0.0.vsix
 | `encrypt.showMarkerWhenReading` | `true` | 显示 `🔐` 标记（vs 隐藏的 `%%🔐%%` 模式） |
 
 ---
+
+## Download
+
+📦 **Pre-built VSIX packages available:**
+- [Download Latest Release](releases/vscode-encrypt-1.1.0.vsix)
+- [View All Releases](releases/)
+- [Download Page](DOWNLOAD.md) - Detailed installation instructions
 
 ## Contributing
 
