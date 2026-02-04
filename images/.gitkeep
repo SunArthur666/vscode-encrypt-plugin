@@ -1,0 +1,27 @@
+# VSCode Encrypt - Images Folder
+
+## Required Files
+
+### icon.png (Required for VS Code Marketplace)
+- **Size**: 128x128 pixels (minimum), 256x256 (recommended)
+- **Format**: PNG with transparency
+- **Style**: Simple, recognizable at small sizes
+- **Theme**: Should represent encryption/security (e.g., a lock, shield, or key)
+
+## Optional Demo Files
+
+### demo-create.gif
+- Demo of creating an encrypted file
+
+### demo-encrypt-selection.gif  
+- Demo of encrypting selected text
+
+### demo-decrypt.gif
+- Demo of decrypting a file
+
+## Design Guidelines
+
+1. Use a dark background (#1e1e1e) to match VS Code
+2. Include a lock or encryption symbol
+3. Keep it simple and recognizable at 16x16 size
+4. Consider using VS Code's color palette

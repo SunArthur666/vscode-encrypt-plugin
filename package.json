@@ -1,0 +1,204 @@
+{
+  "name": "vscode-encrypt",
+  "displayName": "VSCode Encrypt",
+  "description": "Military-grade AES-256 encryption for files and text. Password-protected, instant-save, zero-knowledge.",
+  "version": "1.1.0",
+  "publisher": "SunArthur666",
+  "author": {
+    "name": "SunArthur666",
+    "url": "https://github.com/SunArthur666"
+  },
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SunArthur666/vscode-encrypt-plugin"
+  },
+  "homepage": "https://github.com/SunArthur666/vscode-encrypt-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/SunArthur666/vscode-encrypt-plugin/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "encrypt",
+    "encryption",
+    "AES-256",
+    "AES-256-GCM",
+    "security",
+    "password",
+    "privacy",
+    "markdown",
+    "protected",
+    "confidential",
+    "secure",
+    "crypto",
+    "lock",
+    "secret"
+  ],
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "encrypt.createEncryptedFile",
+        "title": "Create Encrypted File",
+        "icon": "$(lock)"
+      },
+      {
+        "command": "encrypt.encryptFile",
+        "title": "Encrypt Current File",
+        "icon": "$(lock)"
+      },
+      {
+        "command": "encrypt.decryptFile",
+        "title": "Decrypt Current File",
+        "icon": "$(unlock)"
+      },
+      {
+        "command": "encrypt.changePassword",
+        "title": "Change Password",
+        "icon": "$(key)"
+      },
+      {
+        "command": "encrypt.encryptSelection",
+        "title": "Encrypt Selection",
+        "icon": "$(lock)"
+      },
+      {
+        "command": "encrypt.decryptSelection",
+        "title": "Decrypt Selection/Cursor",
+        "icon": "$(unlock)"
+      },
+      {
+        "command": "encrypt.lockAndCloseAll",
+        "title": "Lock and Close All Encrypted Files",
+        "icon": "$(lock)"
+      },
+      {
+        "command": "encrypt.clearPasswordCache",
+        "title": "Clear Password Cache",
+        "icon": "$(remove)"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "encrypt.createEncryptedFile",
+          "group": "encrypt@1",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "encrypt.encryptFile",
+          "group": "encrypt@2",
+          "when": "resourceExtname == .md"
+        },
+        {
+          "command": "encrypt.decryptFile",
+          "group": "encrypt@3",
+          "when": "resourceFilename =~ /\\.md\\.enc$/"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "encrypt.encryptSelection",
+          "group": "encrypt@1"
+        },
+        {
+          "command": "encrypt.decryptSelection",
+          "group": "encrypt@2"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "encrypt.changePassword",
+          "when": "resourceScheme == file && resourceFilename =~ /\\\\.md\\\\.enc$/",
+          "group": "navigation"
+        },
+        {
+          "command": "encrypt.lockAndCloseAll",
+          "when": "resourceScheme == file && resourceFilename =~ /\\\\.md\\\\.enc$/",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Encrypt",
+      "properties": {
+        "encrypt.confirmPassword": {
+          "type": "boolean",
+          "default": true,
+          "description": "Confirm password when encrypting"
+        },
+        "encrypt.rememberPassword": {
+          "type": "boolean",
+          "default": true,
+          "description": "Remember the last used password for this session"
+        },
+        "encrypt.rememberPasswordTimeout": {
+          "type": "number",
+          "default": 30,
+          "minimum": 0,
+          "description": "The number of minutes to remember the last used password (0 = no timeout)"
+        },
+        "encrypt.rememberPasswordLevel": {
+          "type": "string",
+          "enum": ["workspace", "folder", "file"],
+          "default": "workspace",
+          "description": "Remember session passwords by workspace, folder, or file"
+        },
+        "encrypt.expandToWholeLines": {
+          "type": "boolean",
+          "default": false,
+          "description": "Partial selections will be expanded to whole lines"
+        },
+        "encrypt.showMarkerWhenReading": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show encrypted marker in preview mode"
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "markdown",
+        "aliases": ["Markdown", "md.enc"],
+        "extensions": [".md.enc"]
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "encrypt.encryptedFileEditor",
+        "displayName": "Encrypted File Editor",
+        "selector": [
+          { "filenamePattern": "*.md.enc" }
+        ],
+        "priority": "default"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^8.53.0",
+    "@typescript-eslint/parser": "^8.53.0",
+    "typescript": "^5.9.3"
+  }
+}

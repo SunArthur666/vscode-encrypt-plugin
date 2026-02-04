@@ -1,0 +1,48 @@
+# Source files (not needed in published extension)
+src/**
+tsconfig.json
+.eslintrc.json
+
+# Keep compiled output
+!out/**
+
+# Git
+.git/**
+.gitignore
+.gitattributes
+
+# GitHub
+.github/**
+
+# Test files
+**/*.test.ts
+**/*.spec.ts
+test/**
+**/__tests__/**
+
+# Documentation (except README)
+*.md
+!README.md
+IMPLEMENTATION_PLAN.md
+CONTRIBUTING.md
+SECURITY.md
+CHANGELOG.md
+
+# Development files
+.vscode-test/**
+.vscode/**
+.idea/**
+.claude/**
+
+# Encrypted test files
+*.md.enc
+
+# Node modules
+node_modules/**
+
+# Package files
+package-lock.json
+
+# Build artifacts
+*.vsix
+*.map
