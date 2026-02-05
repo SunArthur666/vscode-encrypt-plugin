@@ -263,20 +263,20 @@ export async function decryptCurrentFile(uri?: vscode.Uri): Promise<void> {
     passwordService.put(passwordResult, filePath);
   }
 
-  // Ask user how to decrypt: to file or to memory (virtual document)
+  // Ask user how to decrypt: to memory (default) or to file
   const decryptOption = await vscode.window.showQuickPick(
     [
-      {
-        label: '$(file) Decrypt to File',
-        description: 'Create a .md file on disk (may be committed to Git)',
-        detail: 'The decrypted content will be saved as a regular file',
-        value: 'file'
-      },
       {
         label: '$(eye) View in Memory Only',
         description: 'Read-only, never written to disk (safe from Git)',
         detail: 'Perfect for viewing sensitive content without risk of accidental commits',
         value: 'memory'
+      },
+      {
+        label: '$(file) Decrypt to File',
+        description: 'Create a .md file on disk (may be committed to Git)',
+        detail: 'The decrypted content will be saved as a regular file',
+        value: 'file'
       }
     ],
     {
