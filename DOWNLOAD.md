@@ -1,10 +1,10 @@
 # Download VSCode Encrypt Extension
 
-## Latest Release: v1.1.0
+## Latest Release: v1.2.0
 
 ### Direct Download
 
-📦 **[Download vscode-encrypt-1.1.0.vsix](releases/vscode-encrypt-1.1.0.vsix)** (~55 KB)
+📦 **[Download vscode-encrypt-1.2.0.vsix](releases/vscode-encrypt-1.2.0.vsix)** (~58 KB)
 
 ### Installation Instructions
 
@@ -23,7 +23,7 @@
 
 ```bash
 # Download the file first, then:
-code --install-extension releases/vscode-encrypt-1.1.0.vsix
+code --install-extension releases/vscode-encrypt-1.2.0.vsix
 ```
 
 #### Method 3: GitHub Releases
@@ -44,6 +44,7 @@ You should see: `SunArthur666.vscode-encrypt`
 
 | Version | File | Size | Release Date | Notes |
 |---------|------|------|--------------|-------|
+| 1.2.0 | [vscode-encrypt-1.2.0.vsix](releases/vscode-encrypt-1.2.0.vsix) | ~58 KB | 2026-02-11 | Search & Replace functionality |
 | 1.1.0 | [vscode-encrypt-1.1.0.vsix](releases/vscode-encrypt-1.1.0.vsix) | ~55 KB | 2026-02-04 | Apple-style UI, Memory-only decrypt |
 
 ### Troubleshooting
