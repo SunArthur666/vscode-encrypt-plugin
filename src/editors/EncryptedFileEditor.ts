@@ -805,6 +805,103 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
       color: white;
       font-size: 11px;
     }
+    /* Search bar styles */
+    .search-bar {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 15px;
+      background: var(--vscode-editorWidget-background, var(--vscode-editorGroupHeader-tabsBackground));
+      border-bottom: 1px solid var(--vscode-panel-border);
+    }
+    .search-input-container {
+      display: flex;
+      align-items: center;
+      flex: 0 1 300px;
+      background: var(--vscode-input-background);
+      border: 1px solid var(--vscode-input-border, transparent);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .search-input-container:focus-within {
+      border-color: var(--vscode-focusBorder);
+    }
+    #searchInput {
+      flex: 1;
+      padding: 4px 8px;
+      font-size: 13px;
+      background: transparent;
+      color: var(--vscode-input-foreground);
+      border: none;
+      outline: none;
+      font-family: var(--vscode-font-family);
+    }
+    .search-count {
+      padding: 0 8px;
+      font-size: 12px;
+      color: var(--vscode-descriptionForeground);
+      white-space: nowrap;
+    }
+    .search-btn {
+      padding: 4px 8px !important;
+      font-size: 14px !important;
+      background: transparent !important;
+      color: var(--vscode-foreground) !important;
+      border: none !important;
+      cursor: pointer;
+      border-radius: 3px !important;
+      min-width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+    .search-btn:hover {
+      background: var(--vscode-toolbar-hoverBackground, rgba(90, 93, 94, 0.31)) !important;
+    }
+    mark.search-highlight {
+      background: var(--vscode-editor-findMatchHighlightBackground, rgba(234, 92, 0, 0.33));
+      color: inherit;
+      border-radius: 2px;
+      padding: 1px 0;
+    }
+    mark.search-highlight.current {
+      background: var(--vscode-editor-findMatchBackground, rgba(255, 150, 50, 0.6));
+      outline: 1px solid var(--vscode-editor-findMatchBorder, rgba(255, 150, 50, 0.8));
+    }
+    /* Editor backdrop for search highlighting in textarea */
+    .editor-pane {
+      position: relative;
+    }
+    .editor-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 20px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .editor-backdrop pre {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: var(--vscode-editor-font-size);
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      color: transparent;
+    }
+    #editor.searching {
+      background: transparent;
+      position: relative;
+      z-index: 1;
+      caret-color: var(--vscode-foreground);
+    }
+    .editor-backdrop mark.search-highlight {
+      color: transparent;
+    }
   </style>
 </head>
 <body>
@@ -823,8 +920,18 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
     </div>
     ` : ''}
   </div>
+  <div class="search-bar" id="searchBar">
+    <div class="search-input-container">
+      <input type="text" id="searchInput" placeholder="Search..." autocomplete="off" />
+      <span class="search-count" id="searchCount"></span>
+    </div>
+    <button class="search-btn" onclick="findPrevious()" title="Previous Match (Shift+Enter)">&#9650;</button>
+    <button class="search-btn" onclick="findNext()" title="Next Match (Enter)">&#9660;</button>
+    <button class="search-btn" onclick="closeSearch()" title="Close (Escape)">&#10005;</button>
+  </div>
   <div class="editor-container">
     <div class="editor-pane" id="editorPane">
+      <div class="editor-backdrop" id="editorBackdrop"><pre id="backdropContent"></pre></div>
       <textarea id="editor" spellcheck="false">${this.escapeHtml(content)}</textarea>
     </div>
     <div class="preview-pane" id="previewPane">
@@ -980,6 +1087,273 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
         command: 'changePassword'
       });
     }
+
+    // ====== Search functionality ======
+    const searchBar = document.getElementById('searchBar');
+    const searchInput = document.getElementById('searchInput');
+    const searchCount = document.getElementById('searchCount');
+    const editorBackdrop = document.getElementById('editorBackdrop');
+    const backdropContent = document.getElementById('backdropContent');
+    let searchMatches = [];
+    let currentMatchIndex = -1;
+    let isSearchOpen = false;
+
+    // Open search with Cmd/Ctrl + F
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape' && isSearchOpen) {
+        e.preventDefault();
+        closeSearch();
+      }
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          findPrevious();
+        } else {
+          findNext();
+        }
+      }
+    });
+
+    searchInput.addEventListener('input', () => {
+      performSearch();
+    });
+
+    function openSearch() {
+      searchBar.style.display = 'flex';
+      isSearchOpen = true;
+      searchInput.focus();
+      searchInput.select();
+      if (searchInput.value) {
+        performSearch();
+      }
+    }
+
+    function closeSearch() {
+      searchBar.style.display = 'none';
+      isSearchOpen = false;
+      searchMatches = [];
+      currentMatchIndex = -1;
+      searchCount.textContent = '';
+      // Remove backdrop highlights
+      editor.classList.remove('searching');
+      backdropContent.innerHTML = '';
+      // Clear highlights in preview
+      if (isMarkdown) {
+        updatePreview();
+      }
+      editor.focus();
+    }
+
+    function escapeHtmlForBackdrop(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function performSearch() {
+      const query = searchInput.value;
+      if (!query) {
+        searchMatches = [];
+        currentMatchIndex = -1;
+        searchCount.textContent = '';
+        editor.classList.remove('searching');
+        backdropContent.innerHTML = '';
+        if (isMarkdown) {
+          updatePreview();
+        }
+        return;
+      }
+
+      // Find all matches in editor content
+      const content = editor.value;
+      searchMatches = [];
+      const lowerContent = content.toLowerCase();
+      const lowerQuery = query.toLowerCase();
+      let idx = 0;
+      while ((idx = lowerContent.indexOf(lowerQuery, idx)) !== -1) {
+        searchMatches.push({ start: idx, end: idx + query.length });
+        idx += 1;
+      }
+
+      if (searchMatches.length > 0) {
+        // Find the match closest to cursor position
+        const cursorPos = editor.selectionStart;
+        currentMatchIndex = 0;
+        for (let i = 0; i < searchMatches.length; i++) {
+          if (searchMatches[i].start >= cursorPos) {
+            currentMatchIndex = i;
+            break;
+          }
+        }
+        searchCount.textContent = (currentMatchIndex + 1) + ' of ' + searchMatches.length;
+      } else {
+        currentMatchIndex = -1;
+        searchCount.textContent = 'No results';
+      }
+
+      // Update backdrop highlighting
+      updateBackdropHighlight();
+
+      // Select current match in textarea
+      if (currentMatchIndex >= 0) {
+        selectCurrentMatch();
+      }
+
+      // Highlight matches in preview
+      if (isMarkdown) {
+        highlightPreviewMatches(query);
+      }
+    }
+
+    function updateBackdropHighlight() {
+      const query = searchInput.value;
+      if (!query || searchMatches.length === 0) {
+        editor.classList.remove('searching');
+        backdropContent.innerHTML = '';
+        return;
+      }
+
+      editor.classList.add('searching');
+      const content = editor.value;
+      let html = '';
+      let lastIdx = 0;
+
+      for (let i = 0; i < searchMatches.length; i++) {
+        const match = searchMatches[i];
+        // Add text before this match
+        html += escapeHtmlForBackdrop(content.substring(lastIdx, match.start));
+        // Add highlighted match
+        const cls = i === currentMatchIndex ? 'search-highlight current' : 'search-highlight';
+        html += '<mark class="' + cls + '">' + escapeHtmlForBackdrop(content.substring(match.start, match.end)) + '</mark>';
+        lastIdx = match.end;
+      }
+      // Add remaining text
+      html += escapeHtmlForBackdrop(content.substring(lastIdx));
+      // Add a trailing newline to match textarea behavior
+      html += '\\n';
+      backdropContent.innerHTML = html;
+
+      // Sync backdrop scroll with editor
+      syncBackdropScroll();
+    }
+
+    function syncBackdropScroll() {
+      editorBackdrop.scrollTop = editor.scrollTop;
+      editorBackdrop.scrollLeft = editor.scrollLeft;
+    }
+
+    // Keep backdrop scroll in sync
+    editor.addEventListener('scroll', function syncSearch() {
+      if (isSearchOpen && searchMatches.length > 0) {
+        syncBackdropScroll();
+      }
+    });
+
+    function selectCurrentMatch() {
+      if (currentMatchIndex < 0 || currentMatchIndex >= searchMatches.length) return;
+      const match = searchMatches[currentMatchIndex];
+      editor.setSelectionRange(match.start, match.end);
+      // Scroll textarea to show the match
+      scrollEditorToMatch(match);
+      searchCount.textContent = (currentMatchIndex + 1) + ' of ' + searchMatches.length;
+      // Update backdrop to reflect current match
+      updateBackdropHighlight();
+      // Keep focus on search input
+      searchInput.focus();
+    }
+
+    function scrollEditorToMatch(match) {
+      const textBefore = editor.value.substring(0, match.start);
+      const lines = textBefore.split('\\n');
+      const lineHeight = parseFloat(getComputedStyle(editor).lineHeight) || 24;
+      const targetLine = lines.length - 1;
+      const targetScroll = targetLine * lineHeight - editor.clientHeight / 3;
+      editor.scrollTop = Math.max(0, targetScroll);
+    }
+
+    function findNext() {
+      if (searchMatches.length === 0) {
+        if (searchInput.value) performSearch();
+        return;
+      }
+      currentMatchIndex = (currentMatchIndex + 1) % searchMatches.length;
+      selectCurrentMatch();
+      if (isMarkdown) {
+        highlightPreviewMatches(searchInput.value);
+      }
+    }
+
+    function findPrevious() {
+      if (searchMatches.length === 0) {
+        if (searchInput.value) performSearch();
+        return;
+      }
+      currentMatchIndex = (currentMatchIndex - 1 + searchMatches.length) % searchMatches.length;
+      selectCurrentMatch();
+      if (isMarkdown) {
+        highlightPreviewMatches(searchInput.value);
+      }
+    }
+
+    function highlightPreviewMatches(query) {
+      if (!isMarkdown || !preview) return;
+      // Re-render preview then highlight
+      updatePreview();
+      if (!query) return;
+
+      const walker = document.createTreeWalker(preview, NodeFilter.SHOW_TEXT, null);
+      const textNodes = [];
+      while (walker.nextNode()) {
+        textNodes.push(walker.currentNode);
+      }
+
+      const lowerQuery = query.toLowerCase();
+      let globalMatchIdx = 0;
+
+      textNodes.forEach(node => {
+        const text = node.textContent;
+        const lowerText = text.toLowerCase();
+        const parts = [];
+        let lastIdx = 0;
+        let searchIdx = 0;
+
+        while ((searchIdx = lowerText.indexOf(lowerQuery, lastIdx)) !== -1) {
+          if (searchIdx > lastIdx) {
+            parts.push(document.createTextNode(text.substring(lastIdx, searchIdx)));
+          }
+          const mark = document.createElement('mark');
+          mark.className = 'search-highlight';
+          if (globalMatchIdx === currentMatchIndex) {
+            mark.classList.add('current');
+          }
+          mark.textContent = text.substring(searchIdx, searchIdx + query.length);
+          parts.push(mark);
+          lastIdx = searchIdx + query.length;
+          globalMatchIdx++;
+        }
+
+        if (parts.length > 0) {
+          if (lastIdx < text.length) {
+            parts.push(document.createTextNode(text.substring(lastIdx)));
+          }
+          const parent = node.parentNode;
+          parts.forEach(part => parent.insertBefore(part, node));
+          parent.removeChild(node);
+        }
+      });
+    }
+
+    // Update search when content changes
+    editor.addEventListener('input', () => {
+      if (isSearchOpen && searchInput.value) {
+        performSearch();
+      }
+    });
 
     // Warn before closing with unsaved changes
     window.addEventListener('beforeunload', (e) => {
