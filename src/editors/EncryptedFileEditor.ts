@@ -836,6 +836,46 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
       outline: none;
       font-family: var(--vscode-font-family);
     }
+    .replace-input-container {
+      display: flex;
+      align-items: center;
+      flex: 0 1 300px;
+      background: var(--vscode-input-background);
+      border: 1px solid var(--vscode-input-border, transparent);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .replace-input-container:focus-within {
+      border-color: var(--vscode-focusBorder);
+    }
+    #replaceInput {
+      flex: 1;
+      padding: 4px 8px;
+      font-size: 13px;
+      background: transparent;
+      color: var(--vscode-input-foreground);
+      border: none;
+      outline: none;
+      font-family: var(--vscode-font-family);
+    }
+    .replace-btn {
+      padding: 4px 12px !important;
+      font-size: 12px !important;
+      background: var(--vscode-button-background) !important;
+      color: var(--vscode-button-foreground) !important;
+      border: none !important;
+      cursor: pointer;
+      border-radius: 3px !important;
+      min-width: auto;
+      white-space: nowrap;
+    }
+    .replace-btn:hover {
+      background: var(--vscode-button-hoverBackground) !important;
+    }
+    .replace-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
     .search-count {
       padding: 0 8px;
       font-size: 12px;
@@ -927,6 +967,11 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
     </div>
     <button class="search-btn" onclick="findPrevious()" title="Previous Match (Shift+Enter)">&#9650;</button>
     <button class="search-btn" onclick="findNext()" title="Next Match (Enter)">&#9660;</button>
+    <div class="replace-input-container">
+      <input type="text" id="replaceInput" placeholder="Replace..." autocomplete="off" />
+    </div>
+    <button class="replace-btn" onclick="replaceCurrent()" id="replaceCurrentBtn" title="Replace Current Match (Ctrl+Shift+H)">Replace</button>
+    <button class="replace-btn" onclick="replaceAll()" id="replaceAllBtn" title="Replace All Matches (Ctrl+Alt+Enter)">Replace All</button>
     <button class="search-btn" onclick="closeSearch()" title="Close (Escape)">&#10005;</button>
   </div>
   <div class="editor-container">
@@ -1091,9 +1136,12 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
     // ====== Search functionality ======
     const searchBar = document.getElementById('searchBar');
     const searchInput = document.getElementById('searchInput');
+    const replaceInput = document.getElementById('replaceInput');
     const searchCount = document.getElementById('searchCount');
     const editorBackdrop = document.getElementById('editorBackdrop');
     const backdropContent = document.getElementById('backdropContent');
+    const replaceCurrentBtn = document.getElementById('replaceCurrentBtn');
+    const replaceAllBtn = document.getElementById('replaceAllBtn');
     let searchMatches = [];
     let currentMatchIndex = -1;
     let isSearchOpen = false;
@@ -1125,11 +1173,37 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
       performSearch();
     });
 
+    replaceInput.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'H') {
+        e.preventDefault();
+        replaceCurrent();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'Enter') {
+        e.preventDefault();
+        replaceAll();
+      }
+    });
+
+    // Global keyboard shortcuts for replace
+    document.addEventListener('keydown', (e) => {
+      if (isSearchOpen && (e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'H') {
+        e.preventDefault();
+        replaceCurrent();
+      }
+      if (isSearchOpen && (e.ctrlKey || e.metaKey) && e.altKey && e.key === 'Enter') {
+        e.preventDefault();
+        replaceAll();
+      }
+    });
+
     function openSearch() {
       searchBar.style.display = 'flex';
       isSearchOpen = true;
       searchInput.focus();
       searchInput.select();
+      // Initialize button states
+      replaceCurrentBtn.disabled = true;
+      replaceAllBtn.disabled = true;
       if (searchInput.value) {
         performSearch();
       }
@@ -1141,6 +1215,7 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
       searchMatches = [];
       currentMatchIndex = -1;
       searchCount.textContent = '';
+      replaceInput.value = '';
       // Remove backdrop highlights
       editor.classList.remove('searching');
       backdropContent.innerHTML = '';
@@ -1191,9 +1266,15 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
           }
         }
         searchCount.textContent = (currentMatchIndex + 1) + ' of ' + searchMatches.length;
+        // Enable replace buttons
+        replaceCurrentBtn.disabled = false;
+        replaceAllBtn.disabled = false;
       } else {
         currentMatchIndex = -1;
         searchCount.textContent = 'No results';
+        // Disable replace buttons
+        replaceCurrentBtn.disabled = true;
+        replaceAllBtn.disabled = true;
       }
 
       // Update backdrop highlighting
@@ -1298,6 +1379,80 @@ export class EncryptedFileEditorProvider implements vscode.CustomTextEditorProvi
       if (isMarkdown) {
         highlightPreviewMatches(searchInput.value);
       }
+    }
+
+    function replaceCurrent() {
+      if (currentMatchIndex < 0 || currentMatchIndex >= searchMatches.length) return;
+      if (!searchInput.value) return;
+
+      const match = searchMatches[currentMatchIndex];
+      const replaceText = replaceInput.value || '';
+      const content = editor.value;
+      
+      // Replace the current match
+      const newContent = content.substring(0, match.start) + replaceText + content.substring(match.end);
+      editor.value = newContent;
+      
+      // Update cursor position after replacement
+      const newCursorPos = match.start + replaceText.length;
+      editor.setSelectionRange(newCursorPos, newCursorPos);
+      
+      // Trigger auto-save
+      hasUnsavedChanges = true;
+      triggerAutoSave();
+      
+      // Re-perform search to update matches
+      performSearch();
+      
+      // Move to next match if available
+      if (searchMatches.length > 0) {
+        if (currentMatchIndex >= searchMatches.length) {
+          currentMatchIndex = searchMatches.length - 1;
+        }
+        selectCurrentMatch();
+      } else {
+        searchCount.textContent = 'No results';
+      }
+      
+      showInfo('✓ Replaced');
+    }
+
+    function replaceAll() {
+      if (searchMatches.length === 0) return;
+      if (!searchInput.value) return;
+
+      const replaceText = replaceInput.value || '';
+      let content = editor.value;
+      let offset = 0;
+      
+      // Replace all matches (need to process in reverse order to maintain indices)
+      const sortedMatches = [...searchMatches].sort((a, b) => b.start - a.start);
+      
+      sortedMatches.forEach(match => {
+        content = content.substring(0, match.start) + replaceText + content.substring(match.end);
+      });
+      
+      editor.value = content;
+      
+      // Clear search matches
+      searchMatches = [];
+      currentMatchIndex = -1;
+      searchCount.textContent = '0 matches replaced';
+      
+      // Update backdrop
+      editor.classList.remove('searching');
+      backdropContent.innerHTML = '';
+      
+      // Trigger auto-save
+      hasUnsavedChanges = true;
+      triggerAutoSave();
+      
+      // Update preview
+      if (isMarkdown) {
+        updatePreview();
+      }
+      
+      showInfo('✓ Replaced ' + sortedMatches.length + ' occurrence(s)');
     }
 
     function highlightPreviewMatches(query) {

@@ -24,7 +24,7 @@
   <a href="https://github.com/SunArthur666/vscode-encrypt-plugin/issues">
     <img src="https://img.shields.io/github/issues/SunArthur666/vscode-encrypt-plugin?style=flat-square" alt="GitHub Issues">
   </a>
-  <a href="releases/vscode-encrypt-1.1.0.vsix">
+  <a href="releases/vscode-encrypt-1.2.0.vsix">
     <img src="https://img.shields.io/badge/download-VSIX-blue?style=flat-square&logo=visual-studio-code" alt="Download VSIX">
   </a>
 </p>
@@ -83,6 +83,7 @@ Encrypt entire files or selected text with **AES-256-GCM** — the same encrypti
 | 🔄 **Obsidian Compatible** | Works with Obsidian Encrypt v2.0 files |
 | 👁️ **Memory-Only Decrypt** | View decrypted content without writing to disk (Git-safe) |
 | 🎨 **Apple-Style UI** | Beautiful, minimalist password prompt interface |
+| 🔍 **Search & Replace** | Full-featured search and replace in encrypted editor |
 
 ### Security Guarantees
 
@@ -106,7 +107,7 @@ Encrypt entire files or selected text with **AES-256-GCM** — the same encrypti
 #### From VSIX File (Direct Download)
 
 **Download the latest release:**
-- 📦 [vscode-encrypt-1.1.0.vsix](releases/vscode-encrypt-1.1.0.vsix) (~55 KB)
+- 📦 [vscode-encrypt-1.2.0.vsix](releases/vscode-encrypt-1.2.0.vsix) (~55 KB)
 - 📋 [View all releases](releases/)
 
 **Installation methods:**
@@ -119,7 +120,7 @@ Encrypt entire files or selected text with **AES-256-GCM** — the same encrypti
 
 **Option 2: Command Line**
 ```bash
-code --install-extension releases/vscode-encrypt-1.1.0.vsix
+code --install-extension releases/vscode-encrypt-1.2.0.vsix
 ```
 
 **Option 3: GitHub Releases**
@@ -171,6 +172,26 @@ npx vsce package
 | `Decrypt Selection/Cursor` | Decrypt text at cursor | Editor context menu |
 | `Lock and Close All` | Close all encrypted files | Command palette |
 | `Clear Password Cache` | Clear cached passwords | Command palette |
+
+### Search & Replace in Encrypted Editor
+
+When editing encrypted files (`.md.enc`), you have full search and replace capabilities:
+
+| Action | Shortcut | Description |
+|--------|----------|-------------|
+| **Open Search** | `Cmd+F` / `Ctrl+F` | Open search bar |
+| **Next Match** | `Enter` | Navigate to next match |
+| **Previous Match** | `Shift+Enter` | Navigate to previous match |
+| **Replace Current** | `Ctrl+Shift+H` / `Cmd+Shift+H` | Replace current match |
+| **Replace All** | `Ctrl+Alt+Enter` / `Cmd+Alt+Enter` | Replace all matches |
+| **Close Search** | `Escape` | Close search bar |
+
+**Features:**
+- Case-insensitive search
+- Real-time match highlighting in both editor and preview panes
+- Match counter (e.g., "3 of 10")
+- Current match highlighted with distinct color
+- Automatic content update and auto-save after replacement
 
 ### Decrypt Options
 
@@ -286,6 +307,7 @@ A: **Yes.** Files encrypted with this extension can be decrypted with Obsidian E
 | 🔄 **兼容 Obsidian** | 与 Obsidian Encrypt v2.0 文件兼容 |
 | 👁️ **内存解密** | 解密内容仅在内存中查看，不写入磁盘（防止 Git 提交） |
 | 🎨 **苹果风格 UI** | 精美极简的密码输入界面 |
+| 🔍 **搜索和替换** | 加密编辑器中的完整搜索和替换功能 |
 
 ### 安装
 
@@ -299,7 +321,7 @@ A: **Yes.** Files encrypted with this extension can be decrypted with Obsidian E
 #### 从 VSIX 文件安装（直接下载）
 
 **下载最新版本：**
-- 📦 [vscode-encrypt-1.1.0.vsix](releases/vscode-encrypt-1.1.0.vsix) (~55 KB)
+- 📦 [vscode-encrypt-1.2.0.vsix](releases/vscode-encrypt-1.2.0.vsix) (~55 KB)
 - 📋 [查看所有版本](releases/)
 
 **安装方式：**
@@ -312,7 +334,7 @@ A: **Yes.** Files encrypted with this extension can be decrypted with Obsidian E
 
 **方式 2：命令行**
 ```bash
-code --install-extension releases/vscode-encrypt-1.1.0.vsix
+code --install-extension releases/vscode-encrypt-1.2.0.vsix
 ```
 
 **方式 3：GitHub Releases**
@@ -347,6 +369,26 @@ code --install-extension releases/vscode-encrypt-1.1.0.vsix
 | `Lock and Close All` | 锁定并关闭所有加密文件 |
 | `Clear Password Cache` | 清除密码缓存 |
 
+### 加密编辑器中的搜索和替换
+
+编辑加密文件（`.md.enc`）时，您可以使用完整的搜索和替换功能：
+
+| 操作 | 快捷键 | 描述 |
+|------|--------|------|
+| **打开搜索** | `Cmd+F` / `Ctrl+F` | 打开搜索栏 |
+| **下一个匹配** | `Enter` | 跳转到下一个匹配 |
+| **上一个匹配** | `Shift+Enter` | 跳转到上一个匹配 |
+| **替换当前** | `Ctrl+Shift+H` / `Cmd+Shift+H` | 替换当前匹配 |
+| **替换全部** | `Ctrl+Alt+Enter` / `Cmd+Alt+Enter` | 替换所有匹配 |
+| **关闭搜索** | `Escape` | 关闭搜索栏 |
+
+**功能特性：**
+- 大小写不敏感搜索
+- 在编辑器和预览面板中实时高亮匹配项
+- 匹配计数器（例如 "3 of 10"）
+- 当前匹配项使用不同颜色高亮
+- 替换后自动更新内容并自动保存
+
 ### 解密选项
 
 解密文件时，你可以选择：
@@ -372,7 +414,7 @@ code --install-extension releases/vscode-encrypt-1.1.0.vsix
 ## Download
 
 📦 **Pre-built VSIX packages available:**
-- [Download Latest Release](releases/vscode-encrypt-1.1.0.vsix)
+- [Download Latest Release](releases/vscode-encrypt-1.2.0.vsix)
 - [View All Releases](releases/)
 - [Download Page](DOWNLOAD.md) - Detailed installation instructions
 

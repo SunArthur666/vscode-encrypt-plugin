@@ -4,6 +4,16 @@ This directory contains pre-built VSIX packages for the VSCode Encrypt extension
 
 ## Download Latest Version
 
+### Version 1.2.0
+- **File**: [vscode-encrypt-1.2.0.vsix](vscode-encrypt-1.2.0.vsix)
+- **Size**: ~55 KB
+- **Release Date**: February 11, 2026
+- **Changes**: 
+  - 🔍 Full-featured search functionality (`Cmd+F` / `Ctrl+F`)
+  - 🔄 Find and replace support (`Ctrl+Shift+H` / `Ctrl+Alt+Enter`)
+  - ✨ Match highlighting in editor and preview
+  - ⌨️ Keyboard shortcuts matching VS Code conventions
+
 ### Version 1.1.0
 - **File**: [vscode-encrypt-1.1.0.vsix](vscode-encrypt-1.1.0.vsix)
 - **Size**: ~55 KB
@@ -23,7 +33,7 @@ This directory contains pre-built VSIX packages for the VSCode Encrypt extension
 
 ### Method 2: Command Line
 ```bash
-code --install-extension releases/vscode-encrypt-1.1.0.vsix
+code --install-extension releases/vscode-encrypt-1.2.0.vsix
 ```
 
 ### Method 3: GitHub Releases

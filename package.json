@@ -2,7 +2,7 @@
   "name": "vscode-encrypt",
   "displayName": "VSCode Encrypt",
   "description": "Military-grade AES-256 encryption for files and text. Password-protected, instant-save, zero-knowledge.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "SunArthur666",
   "author": {
     "name": "SunArthur666",
