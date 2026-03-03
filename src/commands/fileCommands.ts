@@ -48,10 +48,12 @@ export async function createEncryptedFile(uri?: vscode.Uri): Promise<void> {
   const timestamp = now.toISOString().replace(/[-:.]/g, '').slice(0, 15);
   const defaultFileName = `untitled-${timestamp}.md.enc`;
 
-  // Get file name
+  // Get file name — pre-select only the editable portion before .md.enc
+  const selectionEnd = defaultFileName.length - '.md.enc'.length;
   let fileName = await vscode.window.showInputBox({
     prompt: 'Enter file name',
     value: defaultFileName,
+    valueSelection: [0, selectionEnd],
     placeHolder: defaultFileName,
     validateInput: (value) => {
       if (!value || value.trim().length === 0) {

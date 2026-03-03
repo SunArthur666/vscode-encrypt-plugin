@@ -13,6 +13,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multiple password support per file
 - Export/Import encrypted files
 
+## [2.0.0] - 2026-03-03
+
+[Download VSIX](releases/vscode-encrypt-2.0.0.vsix) | [View Release Notes](https://github.com/SunArthur666/vscode-encrypt-plugin/releases/tag/v2.0.0)
+
+### Added
+- **Native Editor Integration**: Decrypted `.md.enc` files now open in VSCode's native text editor via an in-memory `FileSystemProvider` (`encfs://`), enabling full support for Markdown extensions (e.g., Markdown All in One syntax highlighting, navigation, TOC)
+- **Single-Tab Experience**: After password entry, the custom editor tab auto-closes, leaving only the native editor — no more two-tab confusion
+- **Auto-Save**: Modified content in the native editor is automatically saved after a 1-second debounce, triggering encryption back to `.md.enc`
+- **Save Notification**: Status bar shows encryption confirmation on every save: `$(lock) Encrypted and saved to .md.enc — plaintext never written to disk`
+- **Editor Title Buttons**: "Change Password" and "Lock & Close All" commands accessible directly from the editor title bar for `encfs://` documents
+- **`[Memory]` File Label**: Virtual file tabs display as `filename [Memory].md` to clearly indicate content lives only in memory
+- **Virtual Directory Support**: `EncryptedFileSystem` now correctly responds to `stat`/`readDirectory` calls for parent directories, preventing errors from other extensions
+
+### Changed
+- **Architecture Overhaul**: Replaced `TextDocumentContentProvider` (`enc://`) with a full `FileSystemProvider` (`encfs://`) for read-write native editing
+- **Simplified Custom Editor**: `EncryptedFileEditor` now serves only as a password-entry gate (Apple-style UI preserved)
+- **Password Change via Command Palette**: Works for both `file://` (.md.enc) and `encfs://` (in-memory) documents
+- **Create File Input**: Default filename selection now excludes `.md.enc` suffix for easier renaming
+
+### Removed
+- Built-in webview markdown editor (replaced by native editor)
+- `EncryptedDocumentProvider` (replaced by `EncryptedFileSystem`)
+- `DecryptedContentCache` service (replaced by `EncryptedFileSystem` in-memory storage)
+
+### Security
+- Plaintext remains strictly in memory — never written to disk
+- Encryption happens transparently on every save via `FileSystemProvider.writeFile`
+
 ## [1.2.0] - 2026-02-11
 
 [Download VSIX](releases/vscode-encrypt-1.2.0.vsix) | [View Release Notes](https://github.com/SunArthur666/vscode-encrypt-plugin/releases/tag/v1.2.0)
@@ -102,7 +130,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Plaintext NEVER written to disk
 - Memory cleared on file close
 
-[Unreleased]: https://github.com/SunArthur666/vscode-encrypt-plugin/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/SunArthur666/vscode-encrypt-plugin/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/SunArthur666/vscode-encrypt-plugin/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/SunArthur666/vscode-encrypt-plugin/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/SunArthur666/vscode-encrypt-plugin/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/SunArthur666/vscode-encrypt-plugin/releases/tag/v1.0.0
