@@ -4,7 +4,7 @@
 
 ### Direct Download
 
-📦 **[Download vscode-encrypt-2.0.0.vsix](releases/vscode-encrypt-2.0.0.vsix)** (~57 KB)
+📦 **[Download vscode-encrypt-2.0.0.vsix](releases/v2.0.0/vscode-encrypt-2.0.0.vsix)** (~57 KB)
 
 ### Installation Instructions
 
@@ -23,7 +23,7 @@
 
 ```bash
 # Download the file first, then:
-code --install-extension releases/vscode-encrypt-2.0.0.vsix
+code --install-extension releases/v2.0.0/vscode-encrypt-2.0.0.vsix
 ```
 
 #### Method 3: GitHub Releases
@@ -44,9 +44,9 @@ You should see: `SunArthur666.vscode-encrypt`
 
 | Version | File | Size | Release Date | Notes |
 |---------|------|------|--------------|-------|
-| 2.0.0 | [vscode-encrypt-2.0.0.vsix](releases/vscode-encrypt-2.0.0.vsix) | ~57 KB | 2026-03-03 | Native editor integration, single-tab UX, auto-save |
-| 1.2.0 | [vscode-encrypt-1.2.0.vsix](releases/vscode-encrypt-1.2.0.vsix) | ~58 KB | 2026-02-11 | Search & Replace functionality |
-| 1.1.0 | [vscode-encrypt-1.1.0.vsix](releases/vscode-encrypt-1.1.0.vsix) | ~55 KB | 2026-02-04 | Apple-style UI, Memory-only decrypt |
+| 2.0.0 | [vscode-encrypt-2.0.0.vsix](releases/v2.0.0/vscode-encrypt-2.0.0.vsix) | ~57 KB | 2026-03-03 | Native editor integration, single-tab UX, auto-save |
+| 1.2.0 | [vscode-encrypt-1.2.0.vsix](releases/v1.2.0/vscode-encrypt-1.2.0.vsix) | ~59 KB | 2026-02-11 | Search & Replace functionality |
+| 1.1.0 | [vscode-encrypt-1.1.0.vsix](releases/v1.1.0/vscode-encrypt-1.1.0.vsix) | ~56 KB | 2026-02-04 | Apple-style UI, Memory-only decrypt |
 
 ### Troubleshooting
 

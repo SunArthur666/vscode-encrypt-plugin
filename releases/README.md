@@ -2,10 +2,27 @@
 
 This directory contains pre-built VSIX packages for the VSCode Encrypt extension.
 
+Each version lives in its own subdirectory alongside its release notes:
+
+```
+releases/
+├── v2.0.0/
+│   ├── vscode-encrypt-2.0.0.vsix
+│   └── vscode-encrypt-2.0.0.vsix.md   ← release notes
+├── v1.2.0/
+│   ├── vscode-encrypt-1.2.0.vsix
+│   └── vscode-encrypt-1.2.0.vsix.md
+├── v1.1.0/
+│   ├── vscode-encrypt-1.1.0.vsix
+│   └── vscode-encrypt-1.1.0.vsix.md
+└── publish-releases.sh                 ← GitHub Releases publish script
+```
+
 ## Download Latest Version
 
 ### Version 2.0.0
-- **File**: [vscode-encrypt-2.0.0.vsix](vscode-encrypt-2.0.0.vsix)
+- **File**: [vscode-encrypt-2.0.0.vsix](v2.0.0/vscode-encrypt-2.0.0.vsix)
+- **Notes**: [vscode-encrypt-2.0.0.vsix.md](v2.0.0/vscode-encrypt-2.0.0.vsix.md)
 - **Size**: ~57 KB
 - **Release Date**: March 3, 2026
 - **Changes**:
@@ -17,23 +34,25 @@ This directory contains pre-built VSIX packages for the VSCode Encrypt extension
   - Virtual directory support for compatibility with other extensions
 
 ### Version 1.2.0
-- **File**: [vscode-encrypt-1.2.0.vsix](vscode-encrypt-1.2.0.vsix)
-- **Size**: ~55 KB
+- **File**: [vscode-encrypt-1.2.0.vsix](v1.2.0/vscode-encrypt-1.2.0.vsix)
+- **Notes**: [vscode-encrypt-1.2.0.vsix.md](v1.2.0/vscode-encrypt-1.2.0.vsix.md)
+- **Size**: ~59 KB
 - **Release Date**: February 11, 2026
-- **Changes**: 
+- **Changes**:
   - Full-featured search functionality (`Cmd+F` / `Ctrl+F`)
   - Find and replace support (`Ctrl+Shift+H` / `Ctrl+Alt+Enter`)
   - Match highlighting in editor and preview
   - Keyboard shortcuts matching VS Code conventions
 
 ### Version 1.1.0
-- **File**: [vscode-encrypt-1.1.0.vsix](vscode-encrypt-1.1.0.vsix)
-- **Size**: ~55 KB
+- **File**: [vscode-encrypt-1.1.0.vsix](v1.1.0/vscode-encrypt-1.1.0.vsix)
+- **Notes**: [vscode-encrypt-1.1.0.vsix.md](v1.1.0/vscode-encrypt-1.1.0.vsix.md)
+- **Size**: ~56 KB
 - **Release Date**: February 4, 2026
-- **Changes**: 
-  - 🎨 Apple-style minimalist password UI
-  - 👁️ Memory-only decrypt mode (Git-safe)
-  - 🔒 Enhanced security with Git protection warnings
+- **Changes**:
+  - Apple-style minimalist password UI
+  - Memory-only decrypt mode (Git-safe)
+  - Enhanced security with Git protection warnings
 
 ## Installation
 
@@ -41,11 +60,11 @@ This directory contains pre-built VSIX packages for the VSCode Encrypt extension
 1. Open VS Code
 2. Go to Extensions (`Ctrl+Shift+X` / `Cmd+Shift+X`)
 3. Click `...` (More Actions) → `Install from VSIX...`
-4. Select the `.vsix` file from this directory
+4. Select the `.vsix` file from the version subdirectory
 
 ### Method 2: Command Line
 ```bash
-code --install-extension releases/vscode-encrypt-2.0.0.vsix
+code --install-extension releases/v2.0.0/vscode-encrypt-2.0.0.vsix
 ```
 
 ### Method 3: GitHub Releases
@@ -76,4 +95,4 @@ npm run compile
 npx vsce package
 ```
 
-The VSIX file will be generated in the project root.
+The VSIX file will be generated in the project root, then move it to `releases/vX.Y.Z/`.

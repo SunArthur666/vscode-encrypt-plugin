@@ -24,7 +24,7 @@
   <a href="https://github.com/SunArthur666/vscode-encrypt-plugin/issues">
     <img src="https://img.shields.io/github/issues/SunArthur666/vscode-encrypt-plugin?style=flat-square" alt="GitHub Issues">
   </a>
-  <a href="releases/vscode-encrypt-2.0.0.vsix">
+  <a href="releases/v2.0.0/vscode-encrypt-2.0.0.vsix">
     <img src="https://img.shields.io/badge/download-VSIX-blue?style=flat-square&logo=visual-studio-code" alt="Download VSIX">
   </a>
 </p>
@@ -107,7 +107,7 @@ Encrypt entire files or selected text with **AES-256-GCM** — the same encrypti
 #### From VSIX File (Direct Download)
 
 **Download the latest release:**
-- 📦 [vscode-encrypt-2.0.0.vsix](releases/vscode-encrypt-2.0.0.vsix) (~57 KB)
+- 📦 [vscode-encrypt-2.0.0.vsix](releases/v2.0.0/vscode-encrypt-2.0.0.vsix) (~57 KB)
 - 📋 [View all releases](releases/)
 
 **Installation methods:**
@@ -120,7 +120,7 @@ Encrypt entire files or selected text with **AES-256-GCM** — the same encrypti
 
 **Option 2: Command Line**
 ```bash
-code --install-extension releases/vscode-encrypt-2.0.0.vsix
+code --install-extension releases/v2.0.0/vscode-encrypt-2.0.0.vsix
 ```
 
 **Option 3: GitHub Releases**
@@ -321,7 +321,7 @@ A: **Yes.** Files encrypted with this extension can be decrypted with Obsidian E
 #### 从 VSIX 文件安装（直接下载）
 
 **下载最新版本：**
-- 📦 [vscode-encrypt-2.0.0.vsix](releases/vscode-encrypt-2.0.0.vsix) (~57 KB)
+- 📦 [vscode-encrypt-2.0.0.vsix](releases/v2.0.0/vscode-encrypt-2.0.0.vsix) (~57 KB)
 - 📋 [查看所有版本](releases/)
 
 **安装方式：**
@@ -334,7 +334,7 @@ A: **Yes.** Files encrypted with this extension can be decrypted with Obsidian E
 
 **方式 2：命令行**
 ```bash
-code --install-extension releases/vscode-encrypt-2.0.0.vsix
+code --install-extension releases/v2.0.0/vscode-encrypt-2.0.0.vsix
 ```
 
 **方式 3：GitHub Releases**
@@ -414,7 +414,7 @@ code --install-extension releases/vscode-encrypt-2.0.0.vsix
 ## Download
 
 📦 **Pre-built VSIX packages available:**
-- [Download Latest Release](releases/vscode-encrypt-2.0.0.vsix)
+- [Download Latest Release](releases/v2.0.0/vscode-encrypt-2.0.0.vsix)
 - [View All Releases](releases/)
 - [Download Page](DOWNLOAD.md) - Detailed installation instructions
 

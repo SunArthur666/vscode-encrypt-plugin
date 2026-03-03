@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.0] - 2026-03-03
 
-[Download VSIX](releases/vscode-encrypt-2.0.0.vsix) | [View Release Notes](https://github.com/SunArthur666/vscode-encrypt-plugin/releases/tag/v2.0.0)
+[Download VSIX](releases/v2.0.0/vscode-encrypt-2.0.0.vsix) | [View Release Notes](https://github.com/SunArthur666/vscode-encrypt-plugin/releases/tag/v2.0.0)
 
 ### Added
 - **Native Editor Integration**: Decrypted `.md.enc` files now open in VSCode's native text editor via an in-memory `FileSystemProvider` (`encfs://`), enabling full support for Markdown extensions (e.g., Markdown All in One syntax highlighting, navigation, TOC)
@@ -43,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2026-02-11
 
-[Download VSIX](releases/vscode-encrypt-1.2.0.vsix) | [View Release Notes](https://github.com/SunArthur666/vscode-encrypt-plugin/releases/tag/v1.2.0)
+[Download VSIX](releases/v1.2.0/vscode-encrypt-1.2.0.vsix) | [View Release Notes](https://github.com/SunArthur666/vscode-encrypt-plugin/releases/tag/v1.2.0)
 
 ### Added
 - **Search Functionality**: Full-featured search in encrypted file editor
@@ -66,7 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2026-02-04
 
-[Download VSIX](releases/vscode-encrypt-1.1.0.vsix) | [View Release Notes](https://github.com/SunArthur666/vscode-encrypt-plugin/releases/tag/v1.1.0)
+[Download VSIX](releases/v1.1.0/vscode-encrypt-1.1.0.vsix) | [View Release Notes](https://github.com/SunArthur666/vscode-encrypt-plugin/releases/tag/v1.1.0)
 
 ### Added
 - **Memory-Only Decrypt Mode**: View decrypted content without writing to disk, preventing accidental Git commits
